@@ -5,7 +5,7 @@
 # Usage example
 Make sure that your CodeChain RPC server is listening. In the examples, we assume it is localhost:8080
 
-## Send 10000 CCC using PaymentTransaction
+## Send 10000 CCC From One Party To Another
 This example involves sending CCC from one party to another. 
 First, make sure to import the correct sdk and use the proper server port.
 ```javascript
@@ -16,7 +16,7 @@ const { Parcel, U256, H256, H160 } = SDK;
 // Create SDK object with CodeChain RPC server URL
 const sdk = new SDK("http://localhost:8080");
 ```
-The parcel signer must pay the transaction fees. Parcels are basically a group of transactions used in CodeChain. They are the smallest unit that can be processed on the blockchain. To read more about parcels in general, click here.
+The parcel signer must pay the transaction fees. Parcels are basically a group of transactions used in CodeChain. They are the smallest unit that can be processed on the blockchain.
 
 In order for the parcel to be valid, the nonce must match the nonce of the parcel signer. Once the parcel is confirmed, the nonce of the signer is increased by 1. When specifying the receiver, make sure the correct address is used for the recipient. In addition, the parcel must be signed with the secret key of the address.
 ```javascript
@@ -47,9 +47,9 @@ sdk.sendSignedParcel(signedParcel).then((hash) => {
 });
 
 ```
-To view entire example, click [here]("https://gist.github.com/ScarletBlue/143e667269b4f2cb596e75ee948ce686.js).
+To view entire example, click [here](https://gist.github.com/ScarletBlue/143e667269b4f2cb596e75ee948ce686.js).
 
-## Mint 10000 Gold and send 3000 Gold using AssetMintTransaction, AssetTransferTransaction
+## Mint 10000 Gold and send 3000 Gold
 
 This example involves creating new assets and sending them amongst users. It largely involves three steps. First, create key pairs for each users. Then create the asset(in this case, Gold). Finally, execute the transaction.
 
