@@ -111,10 +111,7 @@ Then, the AssetMintTransaction is processed with the following code:
 ```
 Alice then sends 3000 gold to Bob. In CodeChain, users must follow the [UTXO](https://codechain.readthedocs.io/en/latest/what-is-codechain.html#what-is-utxo) standard, and make a transaction that spends an entire UTXO balance, and receive the change back through another transaction.
 ```javascript
-    // Spend Alice's 10000 golds. In this case, Alice pays 3000 golds to Bob. Alice
-    // is paid the remains back.
-    // The sum of amount must equal to the amount of firstGold.
-    const transferTx = firstGold.transfer([{
+    const transferTx = await firstGold.transfer(assetAgent, [{
         address: bobAddress,
         amount: 3000
     }, {
@@ -124,30 +121,13 @@ Alice then sends 3000 gold to Bob. In CodeChain, users must follow the [UTXO](ht
 ```
 By using Alice's signature, the 10000 Gold that was first minted can now be transferred to other users like Bob.
 ```javascript
-    // Calculate Alice's signature for the transaction.
-    const { r, s, v } = signEcdsa(transferTx.hashWithoutScript().value, alicePrivate);
-    const aliceSigBuffer = new Buffer(65);
-    aliceSigBuffer.write(r.padStart(64, "0"), 0, 32, "hex");
-    aliceSigBuffer.write(s.padStart(64, "0"), 32, 32, "hex");
-    aliceSigBuffer.write(v.toString(16).padStart(2, "0"), 64, 1, "hex");
-
-    // Create unlock script for the input of the transaction
-    const aliceUnlockScript = Buffer.from([OP_PUSHB, 65, ...aliceSigBuffer]);
-    // Put unlock script to the transaction
-    transferTx.setLockScript(0, aliceLockScript);
-    transferTx.setUnlockScript(0, aliceUnlockScript);
-
-    // Process the AssetTransferTransaction
     await sendTransaction(transferTx);
-
-    // Spent asset will be null
-    console.log(await sdk.getAsset(mintTx.hash(), 0));
 
     // Unspent Bob's 3000 golds
     console.log(await sdk.getAsset(transferTx.hash(), 0));
     // Unspent Alice's 7000 golds
     console.log(await sdk.getAsset(transferTx.hash(), 1));
-})();
+    })();
 
 ```
 The entire example can be viewed [here](https://gist.github.com/ScarletBlue/c2ce044b4a0fb38766b4e05cc7b4dcc6.js).
